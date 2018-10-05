@@ -1,0 +1,5 @@
+{
+    "name": "s4357830/smartgame",
+    "require": {"danielmewes/php-rql": "dev-master",
+        "firebase/php-jwt": "^5.0"}
+}
