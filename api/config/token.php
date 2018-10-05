@@ -9,10 +9,10 @@ class JWTToken {
     private $key="my_super_private_key";
     private $expiry=360;
     
-    public function getToken() {
+    public function obtainToken($uuid) {
         $exp = time() + 4000;
         $payload = Array(
-            "uuid" => "something",
+            "uuid" => $uuid,
             "exp" => $exp,
             "iss" => "http://example.org",
             "aud" => "http://example.com",
@@ -44,11 +44,11 @@ class JWTToken {
 
 }
 
-$jwtToken = new JwtToken();
-$token = $jwtToken->getToken();
-echo $token;
-echo ' <br />Payload: ';
-echo JWT::jsonEncode($jwtToken->getPayload($token));
-echo '<br />Verify: ';
-echo JWT::jsonEncode($jwtToken->verifyToken($token));
+//$jwtToken = new JwtToken();
+//$token = $jwtToken->obtainToken();
+//echo $token;
+//echo ' <br />Payload: ';
+//echo JWT::jsonEncode($jwtToken->getPayload($token));
+//echo '<br />Verify: ';
+//echo JWT::jsonEncode($jwtToken->verifyToken($token));
 ?>
