@@ -27,10 +27,9 @@ class JWTToken {
         try {
             $decoded = JWT::decode($token, $this->key, array('HS256'));
         } catch (Exception $e) {
-            http_response_code(403);
-            return JWT::jsonEncode('{"success": "false"}');
+            return false;
         }
-        return JWT::jsonEncode('{"success": "true"');
+        return true;
     }
 
     public function getPayload($token) {
