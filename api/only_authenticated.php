@@ -19,6 +19,8 @@
     $headers = $tokenConfig->getAllHeaders();
     if (!isset($headers["Authorization"])) {
         http_response_code(400);
+        $json->message = "You are not authorized to view this page.";
+        echo json_encode($json);
         exit();
     }
 
@@ -27,6 +29,8 @@
 
     if (!$tokenConfig->verifyToken($token)) {
         http_response_code(403);
+        $json->message = "You are not authorized to view this page.";
+        echo json_encode($json);
         exit();
     }
 
