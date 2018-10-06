@@ -1,8 +1,8 @@
-<?php
+<?php //phpinfo();
     include_once "../only_post.php";
     
     // Imports
-//    include_once "../config/database.php";
+    include_once "../config/database.php";
     include_once "../config/token.php";
 
     // Headers
@@ -12,14 +12,34 @@
 
     // Initiate Classes
     $tokenConfig = new JWTToken();
-//    $db = new Database();
+    $db = new Database();
 
     // Auth with db username/password
+    $post = json_decode(file_get_contents('php://input'), true);
 
     // If successful
-    $json->token = $tokenConfig->obtainToken("test_user");
+    if (!isset($post["username"]) || !isset($post["password"])) {
+       http_response_code(400); // Bad Request
+       exit();
+    }
+    $account = json_encode($db->getAccount($post["username"]));
+    $account = json_decode($account, true);
+   
+;
+    if (strtolower(trim($account["id"])) != strtolower(trim($post["username"]))) {
+        http_response_code(403);
+        exit();
+    }
+    //$hashedPassword = sha256($_POST["password"]);
+    $hashedPassword = hash_hmac("sha256", $post["password"], "key");
+
+    if ($account["password"] != $hashedPassword && isset($account["password"])) {
+        http_response_code(403);
+        exit(); 
+    }
+
+    $json->token = $tokenConfig->obtainToken($account['id'], $account['houseID']);
     
     echo json_encode($json);
-
 
 ?>

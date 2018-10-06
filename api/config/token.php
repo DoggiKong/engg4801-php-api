@@ -9,10 +9,11 @@ class JWTToken {
     private $key="my_super_private_key";
     private $expiry=360;
     
-    public function obtainToken($uuid) {
+    public function obtainToken($uuid, $houseID) {
         $exp = time() + 4000;
         $payload = Array(
             "uuid" => $uuid,
+            "houseID" => $houseID,
             "exp" => $exp,
             "iss" => "http://example.org",
             "aud" => "http://example.com",
@@ -39,6 +40,23 @@ class JWTToken {
             print_r($e);
         }
         return $decoded;
+    }
+
+    public function getAllHeaders() {
+        if (!function_exists('getallheaders'))  {
+            
+            if (!is_array($_SERVER)) {
+                return array();
+            }
+            $headers = array();
+            foreach ($_SERVER as $name => $value) {
+                if (substr($name, 0, 5) == 'HTTP_') {
+                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                }
+            }
+            return $headers;
+        }
+        return getallheaders();
     }
 
 }
