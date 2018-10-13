@@ -47,6 +47,20 @@ class Database {
         $conn->close();
         return true;
     }
+    
+    public function getScores($deviceID, $houseID) {
+        try {
+            $conn = r\connect($this->host, $this->port);
+            $conn->useDb($houseID);
+            $data = r\table("home1234")->filter(array("deviceID" => $deviceID))->run($conn);
+        } catch (Exception $e) {
+            $conn->close();
+            throw new Exception($e);
+        }
+
+        $conn->close();
+        return $data->toArray();
+    }
 }
 
 //$db = new Database();

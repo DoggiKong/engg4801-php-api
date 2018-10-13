@@ -25,15 +25,17 @@
     $account = json_encode($db->getAccount($post["username"]));
     $account = json_decode($account, true);
    
-;
+
     if (strtolower(trim($account["id"])) != strtolower(trim($post["username"]))) {
+        echo "Wrong account username";
         http_response_code(403);
         exit();
     }
     //$hashedPassword = sha256($_POST["password"]);
     $hashedPassword = hash_hmac("sha256", $post["password"], "key");
 
-    if ($account["password"] != $hashedPassword && isset($account["password"])) {
+    if ($account["password"] != $hashedPassword && $account["password"] != "") {
+        echo "Wrong password";
         http_response_code(403);
         exit(); 
     }
